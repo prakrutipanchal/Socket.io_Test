@@ -3,15 +3,12 @@
   "builds": [
     {
       "src": "api/socket.js",
-      "use": "@vercel/node",
-      "config": { 
-        "includeFiles": ["node_modules/socket.io/**"] 
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/socket.io/(.*)",
+      "src": "/api/socket.io(.*)",
       "dest": "/api/socket",
       "headers": {
         "Connection": "Upgrade",

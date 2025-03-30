@@ -1,15 +1,16 @@
 import { Server } from 'socket.io';
 
-// Workaround for Vercel Serverless cold starts
+// Persistent server instance
 let io;
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
+  // Initialize only once
   if (!io) {
-    console.log('Initializing Socket.IO');
+    console.log('Initializing Socket.IO server');
     const httpServer = res.socket.server;
     
     io = new Server(httpServer, {
-      path: '/socket.io/',
+      path: '/api/socket.io', // Critical path change
       addTrailingSlash: false,
       cors: {
         origin: '*',
@@ -18,14 +19,14 @@ export default function handler(req, res) {
     });
 
     io.on('connection', (socket) => {
-      console.log('New connection:', socket.id);
-      socket.emit('welcome', 'Connected to Vercel!');
+      console.log('Client connected:', socket.id);
+      socket.emit('status', 'Connected to Vercel!');
     });
 
-    // Attach to Vercel's server
+    // Store instance
     httpServer.io = io;
   }
-  
-  // End HTTP request (keep WebSocket open)
+
+  // End HTTP request but keep WebSocket alive
   res.end();
 }

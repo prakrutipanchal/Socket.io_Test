@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html>
-<body>
-  <h1>Socket.IO Test</h1>
+<head>
+  <title>Socket.IO Test</title>
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Socket.IO Vercel Test</h1>
+  <div id="messages"></div>
+
   <script>
+    // Explicit connection configuration
     const socket = io({
-      path: '/socket.io/',
-      transports: ['websocket'], // Force WebSocket only
+      path: '/api/socket.io',
+      transports: ['websocket'],
       reconnectionAttempts: 5
     });
 
-    socket.on('connect_error', (err) => {
-      console.error('Connection error:', err);
+    socket.on('connect', () => {
+      appendMessage('Connected to server!');
     });
 
-    socket.on('welcome', (msg) => {
-      document.body.innerHTML += `<p>${msg}</p>`;
-      console.log('Server:', msg);
+    socket.on('status', (msg) => {
+      appendMessage('Server: ' + msg);
     });
+
+    socket.on('disconnect', () => {
+      appendMessage('Disconnected from server');
+    });
+
+    function appendMessage(msg) {
+      const div = document.createElement('div');
+      div.textContent = msg;
+      document.getElementById('messages').appendChild(div);
+    }
   </script>
 </body>
 </html>
