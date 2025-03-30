@@ -1,5 +1,7 @@
 import { Server } from 'socket.io';
+export const config = { runtime: 'edge' }; // Add this line at the top
 
+import { Server } from 'socket.io';
 // Persistent server instance
 let io;
 
