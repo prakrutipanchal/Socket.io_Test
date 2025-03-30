@@ -1,10 +1,26 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/socket.js", "use": "@vercel/node" }
+    {
+      "src": "api/socket.js",
+      "use": "@vercel/node",
+      "config": { 
+        "includeFiles": ["node_modules/socket.io/**"] 
+      }
+    }
   ],
   "routes": [
-    { "src": "/socket.io/(.*)", "dest": "/api/socket" },
-    { "src": "/(.*)", "dest": "/public/index.html" }
+    {
+      "src": "/socket.io/(.*)",
+      "dest": "/api/socket",
+      "headers": {
+        "Connection": "Upgrade",
+        "Upgrade": "websocket"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.html"
+    }
   ]
 }

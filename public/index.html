@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>Socket.IO Test</h1>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script>
+    const socket = io({
+      path: '/socket.io/',
+      transports: ['websocket'], // Force WebSocket only
+      reconnectionAttempts: 5
+    });
+
+    socket.on('connect_error', (err) => {
+      console.error('Connection error:', err);
+    });
+
+    socket.on('welcome', (msg) => {
+      document.body.innerHTML += `<p>${msg}</p>`;
+      console.log('Server:', msg);
+    });
+  </script>
+</body>
+</html>
